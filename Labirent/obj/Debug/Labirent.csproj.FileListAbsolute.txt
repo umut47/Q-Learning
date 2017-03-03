@@ -1,0 +1,9 @@
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\bin\Debug\Labirent.exe.config
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\bin\Debug\Labirent.exe
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\bin\Debug\Labirent.pdb
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.csprojResolveAssemblyReference.cache
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.Form1.resources
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.Properties.Resources.resources
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.csproj.GenerateResource.Cache
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.exe
+c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.pdb
