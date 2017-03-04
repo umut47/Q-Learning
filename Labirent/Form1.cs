@@ -100,7 +100,7 @@ namespace Labirent
                         }
                        
                     }
-
+                    int indis;
                     for (int i = 0; i < iterasyon;  i++)
                     {
                         if (i == 0)
@@ -116,7 +116,7 @@ namespace Labirent
                             }
                             else
                             {
-                                int indis = rnd.Next(0, komsular.Length);
+                                indis = rnd.Next(0, komsular.Length);
                                 rand_sutun = Convert.ToInt32(komsular[indis]);
                             }
                            
@@ -166,10 +166,7 @@ namespace Labirent
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-        }
-
+     
         public decimal MAX(int value)
         {
 
@@ -183,13 +180,18 @@ namespace Labirent
             }
             decimal enbuyuk = -1;
             decimal temp;
-            for (int i = ix; i >= 0; i--)
+            for (int i=0;i<=ix;i++)
             {
                 temp = Q_matris[value, Convert.ToInt32(komsular[i])];
-                if (temp > enbuyuk)
+                if (temp >= enbuyuk)
                 {
                     enbuyuk = temp;
+                 
                     max_index = Convert.ToInt32(komsular[i]);
+                    if (i!=0 && (max_index < Convert.ToInt32(komsular[i - 1])))
+                    {
+                        max_index = Convert.ToInt32(komsular[i - 1]);
+                    }
                 }
 
             }
