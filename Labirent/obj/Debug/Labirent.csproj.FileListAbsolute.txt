@@ -7,3 +7,4 @@ c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debu
 c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.csproj.GenerateResource.Cache
 c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.exe
 c:\users\robots\documents\visual studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.pdb
+C:\Users\Robots\Documents\Visual Studio 2015\Projects\Labirent\Labirent\obj\Debug\Labirent.Draw_Maze.resources

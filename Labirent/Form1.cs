@@ -18,13 +18,13 @@ namespace Labirent
         public static decimal[,] R_matris;
         public static decimal[,] Q_matris;
         public static int hedef_nokta;
-        public static int rand_sutun=0;
+        public static int aksiyom = 0;
         public static string[] line;
         public static int max_index;
         public static int start_node;
         public static string path;
-        public static string q_drawe;
-        public static string r_drawe;
+        public static int sonraki_aksiyom;
+        public static string yol;
         public Form1()
         {
             InitializeComponent();
@@ -32,19 +32,19 @@ namespace Labirent
 
         private void button1_Click(object sender, EventArgs e)
         {
-           
+
 
 
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "Text files | *.txt"; // file types, that will be allowed to upload
             dialog.Multiselect = false; // allow/deny user to upload more than one file at a time
             if (dialog.ShowDialog() == DialogResult.OK) // if user clicked OK
-            {  
+            {
                 try
                 {
-                     path = dialog.FileName; // get name of file
-                     file_name_label.Text= Path.GetFileName(path);
-                     
+                    path = dialog.FileName; // get name of file
+                    file_name_label.Text = Path.GetFileName(path);
+
                 }
                 catch (IOException)
                 {
@@ -63,7 +63,7 @@ namespace Labirent
             //string text split
             line = text.Split('\n');
             //line array length 
-            size = line.Length - 1;
+            size = line.Length;
             R_matris = new decimal[size, size];
             // //R_matris all index value -1 
             for (int i = 0; i < size; i++)
@@ -88,29 +88,28 @@ namespace Labirent
                 node_size = node.Length;
                 for (int j = 0; j < node_size; j++)
                 {
-                    int index = Convert.ToInt32(node[j]);
+                    int suanki_yer = Convert.ToInt32(node[j]);
                     //If the target point is equal, give 100
-                    if (hedef_nokta == index)
+                    if (hedef_nokta == suanki_yer)
                     {
-                        R_matris[i, index] = 100;
+                        R_matris[i, suanki_yer] = 100;
                     }
                     else
                     {
-                        R_matris[i, index] = 0;
+                        R_matris[i, suanki_yer] = 0;
                     }
+
                 }
+                R_matris[hedef_nokta, hedef_nokta] = 100;
             }
 
             //R_matris finish..
 
             //Q_matris start....-->
-            Random rnd = new Random();
+
             Q_matris = new decimal[size, size];
 
-
-
-            //
-
+            //Q_matris elemanları ilk anda sıfır yapılıyor..
             for (int i = 0; i < size; i++)
             {
                 for (int j = 0; j < size; j++)
@@ -119,45 +118,38 @@ namespace Labirent
                 }
 
             }
+
             int indis;
             int a = 0;
             int sayac = 0;
+            //iterasyon start
+            Random rnd = new Random();
             for (int i = 0; i < iterasyon; i++)
             {
 
-                while (hedef_nokta != rand_sutun)
+                string[] komsular = (line[start_node]).Split(',');
+                indis = rnd.Next(0, komsular.Length);
+                aksiyom = Convert.ToInt32(komsular[indis]);
+
+                while (hedef_nokta != aksiyom)
                 {
-                    if (a == 0)
+
+                    Q_matris[start_node, aksiyom] = R_matris[start_node, aksiyom] + (MAX(aksiyom) * 80 / 100);
+                    start_node = aksiyom;
+                    aksiyom = sonraki_aksiyom;
+                    if (sonraki_aksiyom == hedef_nokta || start_node == hedef_nokta)
                     {
-                        string[] komsular = (line[start_node]).Split(',');
-                        if (komsular.Length == 0)
-                        {
-                            rand_sutun = Convert.ToInt32(komsular[0]);
-                        }
-                        else
-                        {
-                            indis = rnd.Next(0, komsular.Length);
-                            rand_sutun = Convert.ToInt32(komsular[indis]);
-                        }
-                        a++;
 
+                        Q_matris[start_node, aksiyom] = R_matris[start_node, aksiyom] + (MAX(aksiyom) * 80 / 100);
                     }
-                    if (start_node == 0)
-                    {
-                        decimal ass = Q_matris[start_node, rand_sutun];
-                        sayac++;
 
-                    }
-                    Q_matris[start_node, rand_sutun] = R_matris[start_node, rand_sutun] + (MAX(rand_sutun) * 80 / 100);
-
-                    a = 0;
 
                 }
 
-                rand_sutun = rnd.Next(0, size);
+                start_node = baslangic;
 
             }
-
+            //iterasyon stop
             //Q_matris finish....-->
 
             //R_matris writer file...
@@ -170,7 +162,7 @@ namespace Labirent
                 }
                 outR = outR + "\n";
             }
-            r_drawe = outR;
+
             ///Q mtaris czim
             string outQ = "";
             for (int i = 0; i < size; i++)
@@ -181,9 +173,9 @@ namespace Labirent
                 }
                 outQ = outQ + "\n";
             }
-            q_drawe = outQ;
+
             //labirent cizim
-       //     string way = draw_way(baslangic, hedef_nokta, size);
+            string way = draw_way(baslangic, hedef_nokta, size);
 
             System.IO.StreamWriter file = new System.IO.StreamWriter("C:\\Users\\Robots\\Desktop\\yazlab_out\\outR.txt");
             file.WriteLine(outR);
@@ -191,13 +183,13 @@ namespace Labirent
             System.IO.StreamWriter file2 = new System.IO.StreamWriter("C:\\Users\\Robots\\Desktop\\yazlab_out\\outQ.txt");
             file2.WriteLine(outQ);
             file2.Close();
-         //   System.IO.StreamWriter file3 = new System.IO.StreamWriter("C:\\Users\\Robots\\Desktop\\yazlab_out\\outPath.txt");
-         //   file3.WriteLine(way);
-         //   file3.Close();
+            System.IO.StreamWriter file3 = new System.IO.StreamWriter("C:\\Users\\Robots\\Desktop\\yazlab_out\\outPath.txt");
+            file3.WriteLine(way);
+            file3.Close();
 
-            MessageBox.Show(sayac.ToString());
+            MessageBox.Show("Tamamlandı.");
 
-            Draw_Maze dm=new Draw_Maze();
+            Draw_Maze dm = new Draw_Maze();
             this.Hide();
             dm.Show();
         }
@@ -209,62 +201,92 @@ namespace Labirent
         {
 
             string[] komsular = (line[value]).Split(',');
-            int ix = komsular.Length-1;
+            int ix = komsular.Length - 1;
 
             if (ix == 0)
             {
-                value = 0;
-                return value;
+                sonraki_aksiyom = Convert.ToInt32(komsular[0]);
+                return Q_matris[value, Convert.ToInt32(komsular[0])];
             }
             decimal enbuyuk = Q_matris[value, Convert.ToInt32(komsular[0])];
             decimal temp;
-            for (int i=0;i<=ix;i++)
+            for (int i = 0; i <= ix; i++)
             {
                 temp = Q_matris[value, Convert.ToInt32(komsular[i])];
-                if (temp >enbuyuk)
+                if (temp > enbuyuk)
                 {
                     enbuyuk = temp;
-                    
+
                 }
 
             }
 
             //Random düğüm
-            Random rnd=new Random();
+            Random rnd = new Random();
             int indis = 0;
             indis = rnd.Next(0, komsular.Length);
-            rand_sutun = Convert.ToInt32(komsular[indis]);
-            start_node = value;
+            sonraki_aksiyom = Convert.ToInt32(komsular[indis]);
             return enbuyuk;
         }
 
 
 
-        public string draw_way(int startnode, int endnode,int byt)
+        public string draw_way(int startnode, int endnode, int byt)
         {
-            decimal enbuyuk = Q_matris[startnode,0];
-            decimal temp;
-            int new_start=startnode;
-            string yol =new_start.ToString();
-            while (new_start != endnode)
-            {
-                for (int i = 0; i < byt; i++)
+            decimal newState;
+           
+                sonraki_aksiyom = startnode;
+                 newState = 0;
+                do
                 {
-                    temp = Q_matris[new_start, i];
-                    if (temp > enbuyuk)
-                    {
-                        enbuyuk = temp;
-                        new_start = i;
-                        yol = yol + " -> " + new_start;
-                    }
-
-                }
-            }
+                    newState = max_yol(sonraki_aksiyom);
+                     yol=yol+ sonraki_aksiyom + ", ";
+                    sonraki_aksiyom = Convert.ToInt32(newState);
+                } while (sonraki_aksiyom != hedef_nokta);
+                yol = yol + hedef_nokta;
+           
             return yol;
         }
 
-      
+     public decimal max_yol(int state)
+        {
+          
+            int aksiyom;
+            bool kucuk_mu;
+            bool  buyuk_mu= false;
 
-     
+            aksiyom = 0;
+
+            do
+            {
+                kucuk_mu = false;
+                for (int i = 0; i <= (size - 1); i++)
+                {
+                    if ((i < aksiyom) || (i > aksiyom))
+                    {    
+                        if (Q_matris[state,i] > Q_matris[state, aksiyom])
+                        {
+                            aksiyom = i;
+                            kucuk_mu = true;
+                        }
+                    }
+                } 
+
+                if (kucuk_mu == false)
+                {
+                    buyuk_mu = true;
+                }
+
+            } while (buyuk_mu == false);
+
+                //Q matrisinin indexini döndürür..
+                return aksiyom;
+         
+
+        }
+
+
+
+
     }
 }
