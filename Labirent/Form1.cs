@@ -15,13 +15,14 @@ namespace Labirent
     {
         // Defining variables
         public static int size = 0;
-        public static decimal[,] R_matris;
-        public static decimal[,] Q_matris;
+        public static double[,] R_matris;
+        public static double[,] Q_matris;
         public static int hedef_nokta;
         public static int aksiyom = 0;
         public static string[] line;
         public static int max_index;
         public static int start_node;
+        public static double lamda=0.8;
         public static string path;
         public static int sonraki_aksiyom;
         public static string yol;
@@ -64,7 +65,7 @@ namespace Labirent
             line = text.Split('\n');
             //line array length 
             size = line.Length;
-            R_matris = new decimal[size, size];
+            R_matris = new double[size, size];
             // //R_matris all index value -1 
             for (int i = 0; i < size; i++)
             {
@@ -107,7 +108,7 @@ namespace Labirent
 
             //Q_matris start....-->
 
-            Q_matris = new decimal[size, size];
+            Q_matris = new double[size, size];
 
             //Q_matris elemanları ilk anda sıfır yapılıyor..
             for (int i = 0; i < size; i++)
@@ -126,27 +127,30 @@ namespace Labirent
             Random rnd = new Random();
             for (int i = 0; i < iterasyon; i++)
             {
-
-                string[] komsular = (line[start_node]).Split(',');
-                indis = rnd.Next(0, komsular.Length);
-                aksiyom = Convert.ToInt32(komsular[indis]);
-
-                while (hedef_nokta != aksiyom)
-                {
-
-                    Q_matris[start_node, aksiyom] = R_matris[start_node, aksiyom] + (MAX(aksiyom) * 80 / 100);
-                    start_node = aksiyom;
-                    aksiyom = sonraki_aksiyom;
-                    if (sonraki_aksiyom == hedef_nokta || start_node == hedef_nokta)
+               
+                    string[] komsular = (line[start_node]).Split(',');
+                    indis = rnd.Next(0, komsular.Length);
+                    aksiyom = Convert.ToInt32(komsular[indis]);
+                
+                    while (hedef_nokta != aksiyom)
                     {
 
-                        Q_matris[start_node, aksiyom] = R_matris[start_node, aksiyom] + (MAX(aksiyom) * 80 / 100);
+                        Q_matris[start_node, aksiyom] = R_matris[start_node, aksiyom] + (MAX(aksiyom)*lamda);
+                        start_node = aksiyom;
+                        aksiyom = sonraki_aksiyom;
+                        if (aksiyom == hedef_nokta )
+                        {
+
+                            Q_matris[start_node, aksiyom] = R_matris[start_node, aksiyom] + (MAX(aksiyom)*lamda);
+                            Q_matris[aksiyom, start_node] = R_matris[aksiyom, start_node] + (MAX(start_node) * lamda);
+                            Q_matris[aksiyom, aksiyom] = R_matris[aksiyom, aksiyom] + (MAX(aksiyom) * lamda);
+                        }
+
+
                     }
-
-
-                }
-
-                start_node = baslangic;
+                    start_node = baslangic;
+                 
+                    
 
             }
             //iterasyon stop
@@ -197,19 +201,25 @@ namespace Labirent
 
 
 
-        public decimal MAX(int value)
+        public double MAX(int value)
         {
 
+          
             string[] komsular = (line[value]).Split(',');
             int ix = komsular.Length - 1;
 
-            if (ix == 0)
+
+            double enbuyuk;
+            if (value == hedef_nokta)
             {
-                sonraki_aksiyom = Convert.ToInt32(komsular[0]);
-                return Q_matris[value, Convert.ToInt32(komsular[0])];
+                enbuyuk= Q_matris[value, value];
             }
-            decimal enbuyuk = Q_matris[value, Convert.ToInt32(komsular[0])];
-            decimal temp;
+            else
+            {
+                enbuyuk = Q_matris[value, Convert.ToInt32(komsular[0])];
+            }
+
+            double temp;
             for (int i = 0; i <= ix; i++)
             {
                 temp = Q_matris[value, Convert.ToInt32(komsular[i])];
