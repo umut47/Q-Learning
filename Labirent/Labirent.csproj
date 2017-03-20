@@ -92,6 +92,7 @@
   <ItemGroup>
     <Content Include="Properties\image.png" />
     <Content Include="Properties\image2.png" />
+    <Content Include="Properties\smal_image.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
